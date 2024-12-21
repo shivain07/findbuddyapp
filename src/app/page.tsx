@@ -15,13 +15,13 @@ export default function Home() {
           <div className="space-x-4">
             <Link
               href={"/signup"}
-              className="inline-flex items-center px-6 py-2 rounded-sm bg-purple-500 text-white font-semibold text-lg  shadow-md hover:bg-purple-600 transition"
+              className="inline-flex items-center px-6 py-2 rounded-sm bg-purple-500 text-white font-medium text-lg  shadow-md hover:bg-purple-600 transition"
             >
               Sign up
             </Link>
             <Link
               href={"/login"}
-              className="inline-flex items-center px-6 py-2 rounded-sm bg-purple-300 text-white font-semibold text-lg rounded-full shadow-md hover:bg-purple-600 transition"
+              className="inline-flex items-center px-6 py-2 rounded-sm bg-purple-300 text-white font-medium  text-lg shadow-md hover:bg-purple-600 transition"
             >
               Login
             </Link>

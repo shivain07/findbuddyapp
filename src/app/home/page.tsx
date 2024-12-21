@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 
 function Homepage() {
   const router = useRouter();
-  const {setUser} = useUserStore();
+  const {setUser,setIsLoggedin} = useUserStore();
   const { apiCall } = useApiCall(); // Accessing the apiCall function
   const { toast } = useToast();
 
@@ -27,8 +27,8 @@ function Homepage() {
         method: "GET",
       });
       if (response?.user) {
-        localStorage.setItem("userId",response?.user?._id||"")
         setUser(response?.user);
+        setIsLoggedin(true);
       }
     } catch (error) {
       console.log(error);

@@ -1,5 +1,5 @@
+"use client"
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import PhotonAutoSuggestion from "@/components/utility/PhotonAutoSuggestion";
 import { API_PATH } from "@/constants/apiConstant";
@@ -22,7 +22,6 @@ function Search() {
   const [relevantPosts, setRelevantPosts] = useState<IUserPost[]>([]);
 
   const getSearchResults = async () => {
-    console.log(selectedCoordinates, rangeInKm);
     await apiCall({
       url: API_PATH.search,
       method: "POST",

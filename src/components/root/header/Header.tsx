@@ -19,7 +19,7 @@ import { useApiCall } from "@/helpers/axiosWrapper";
 
 function Header() {
   const router = useRouter();
-  const { user, isLoggedin } = useUserStore();
+  const { user, isLoggedin, setIsLoggedin } = useUserStore();
   const pathname = usePathname(); // Get the current URL path
   const { apiCall } = useApiCall(); // Accessing the apiCall function
 
@@ -30,26 +30,27 @@ function Header() {
         method: "GET",
         data: { user: user },
       });
-      sessionStorage.setItem("isLoggedIn", "false")
       router.push("/login");
+      setIsLoggedin(false);
     } catch (error: any) {
       console.log(error.message);
     }
   };
 
+  const logoClick = () => {
+    if (isLoggedin) {
+      router.push(`/home`);
+    } else {
+      router.push(`/`);
+    }
+  }
   return (
     <header className="flex items-center justify-between px-4 py-3 bg-white shadow-md border-b-2">
       {/* LinkedIn Logo */}
       <div className="flex items-center space-x-2">
         <div
           className="text-purple-900 font-bold text-2xl cursor-pointer"
-          onClick={() => {
-            if (isLoggedin) {
-              router.push(`/home`);
-            } else {
-              router.push(`/`);
-            }
-          }}
+          onClick={logoClick}
         >
           Findbuddy?
         </div>

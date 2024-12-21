@@ -1,13 +1,12 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogTitle,
+  AlertDialogHeader,
+  AlertDialogTrigger
+} from "@/components/ui/alert-dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { API_PATH } from "@/constants/apiConstant";
 import { useApiCall } from "@/helpers/axiosWrapper";
@@ -17,13 +16,14 @@ import { Avatar } from "@radix-ui/react-avatar";
 import {
   ArrowDownIcon,
   ChatBubbleIcon,
+  Cross1Icon,
   DoubleArrowDownIcon,
   HeartIcon,
 } from "@radix-ui/react-icons";
-import { ObjectId } from "mongoose";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-
+import userNoDp from "@/assets/images/userimg.png";
+import Image from "next/image";
 interface IPostComment {
   title: string;
   content: string;
@@ -46,6 +46,7 @@ function PostComment({
   const { apiCall } = useApiCall(); // Accessing the apiCall function
   const [comments, setComments] = useState<IComment[]>([]);
   const [totalComments, setTotalComments] = useState(commentsCount);
+  const [open, setOpen] = useState(false);
   const {
     register,
     handleSubmit,
@@ -60,25 +61,24 @@ function PostComment({
       postId,
     };
 
-    await apiCall({
+    let res = await apiCall({
       url: API_PATH.comment.add,
       method: "POST",
       data: commentData,
-    })
-      .then((res) => {
-        if (res) {
-          toast({
-            title: "Comment added successfully"
-          })
-          getAllComments();
-          reset({
-            comment: "",
-          });
-        }
+    });
+
+    if (res) {
+      toast({
+        title: "Comment added successfully"
       })
-      .catch((err) => {
-        console.log(err);
+      getAllComments();
+      reset({
+        comment: "",
       });
+    } else {
+      setOpen(false);
+    }
+
   };
 
   const getAllComments = async () => {
@@ -99,8 +99,8 @@ function PostComment({
   };
 
   return (
-    <Dialog>
-      <DialogTrigger onClick={getAllComments} asChild>
+    <AlertDialog open={open} onOpenChange={setOpen}>
+      <AlertDialogTrigger onClick={getAllComments} asChild>
         <Button
           variant="ghost"
           className="flex items-center text-sm text-gray-600"
@@ -108,15 +108,26 @@ function PostComment({
           <ChatBubbleIcon className="w-5 h-5 text-purple-700" />
           <span>{totalComments > 0 ? totalComments : ""}</span>
         </Button>
-      </DialogTrigger>
-      <DialogContent className="overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-sm">Post</DialogTitle>
-        </DialogHeader>
-        <div>
-          <p className="text-xl font-bold text-gray-800">{title}</p>
-          <p className="text-md text-gray-700">{content}</p>
-        </div>
+      </AlertDialogTrigger>
+
+      <AlertDialogContent className="overflow-y-auto shadow-lg">
+        <AlertDialogHeader>
+          <AlertDialogTitle className="text-sm flex justify-between">
+            <span>Post</span>
+            <Cross1Icon
+              color="black"
+              height={30}
+              width={30}
+              className="cursor-pointer hover:scale-125"
+              onClick={() => setOpen(false)}
+            />
+          </AlertDialogTitle>
+
+        </AlertDialogHeader>
+
+        <p className="text-xl font-bold text-gray-800">{title}</p>
+        <p className="text-md text-gray-700">{content}</p>
+
         <div>
           <div className="mt-2">
             <textarea
@@ -157,10 +168,12 @@ function PostComment({
                 >
                   <div className="flex items-center">
                     <Avatar className="w-[30px] h-[30px] rounded-full overflow-hidden border-2 border-gray-200">
-                      <img
-                        src="https://github.com/shadcn.png"
+                      <Image
+                        src={comment?.postedBy?.profileImgUrl || userNoDp}
                         alt="Avatar"
                         className="object-cover w-full h-full"
+                        height={100}
+                        width={100}
                       />
                     </Avatar>
                     <div className="mx-1">
@@ -190,8 +203,9 @@ function PostComment({
             )}
           </ScrollArea>
         </div>
-      </DialogContent>
-    </Dialog>
+      </AlertDialogContent>
+
+    </AlertDialog>
   );
 }
 

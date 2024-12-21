@@ -6,24 +6,27 @@ import { IUserPost } from "@/interfaces/user";
 import { HeartFilledIcon } from "@radix-ui/react-icons";
 import { useEffect, useState } from "react";
 
-interface ProfilePageProps {
-  params: {
-    id: string; // Assuming the `id` in the route is a string
-  };
-}
-function ProfilePage({ params }: ProfilePageProps) {
+type ProfilePageProps = {
+  params: Promise<{
+    id: string;
+  }>;
+};
+
+const ProfilePage =  ({ params }: ProfilePageProps) => {
   const { apiCall } = useApiCall(); // Accessing the apiCall function
   const [userPosts, setUserPosts] = useState<IUserPost[]>([]);
+
   useEffect(() => {
     getUserData();
   }, []);
 
   const getUserData = async () => {
     try {
+      const { id } = await params;
       const data = await apiCall({
         url: API_PATH.post.get,
         method: "GET",
-        params: { userId: params?.id },
+        params: { userId: id },
       });
       data.userPosts ? setUserPosts(data.userPosts) : setUserPosts([]);
     } catch (error) {
@@ -45,7 +48,7 @@ function ProfilePage({ params }: ProfilePageProps) {
           {userPosts.length > 0 ? (
             userPosts?.map((post) => {
               return (
-                <div className="lg:col-span-4 md:col-span-6 col-span-12">
+                <div className="lg:col-span-4 md:col-span-6 col-span-12" key={post._id}>
                   <Post
                     _id={post._id}
                     title={post.title}

@@ -40,7 +40,7 @@ function VerificationPopup() {
   };
 
   return (
-    <AlertDialog open={showUserVerificationModal}>
+    <AlertDialog open={showUserVerificationModal} onOpenChange={setShowUserVerificationModal}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <div className="flex justify-between">
