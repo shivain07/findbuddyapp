@@ -51,7 +51,7 @@ export default function Post({
       <p className="text-sm text-gray-800">{title}</p>
       <p className="text-sm text-gray-700">{content}</p>
       <div className="text-right">
-        <span className="text-xs font-light italic">
+        <span className="text-xs font-light italic" suppressHydrationWarning={true}> 
           {updatedAt ? getDateAndTime(updatedAt) : "-"}
         </span>
       </div>

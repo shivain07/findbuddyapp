@@ -1,3 +1,4 @@
+"use client"
 import React, { useState, useEffect, Dispatch, SetStateAction } from "react";
 import axios from "axios";
 import Select from "react-select";
@@ -97,7 +98,7 @@ const PhotonAutoSuggestion = ({
   };
 
   return (
-    <div>
+    <div suppressHydrationWarning={true}>
       {showLabel&&<label className="block text-sm/6 font-medium text-gray-900 my-1">
         Place / location :
       </label>}
@@ -108,6 +109,7 @@ const PhotonAutoSuggestion = ({
         placeholder={placeholder}
         isClearable
         className="text-gray-700"
+        id={placeholder}
       />
 
       {/* <small className="block text-xs font-light text-grey-300 my-1">

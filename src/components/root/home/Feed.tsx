@@ -26,7 +26,7 @@ function Feed() {
   };
 
   return (
-  <>
+    <>
       <div className="p-6">
         <PostInput />
       </div>

@@ -1,10 +1,10 @@
 "use client";
+import { Button } from "@/components/ui/button";
 import { API_PATH } from "@/constants/apiConstant";
 import { useUserStore } from "@/GlobalStore/userStore";
 import { useApiCall } from "@/helpers/axiosWrapper";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 type Inputs = {
@@ -65,11 +65,12 @@ function LoginPage() {
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           {/* Submit button */}
-          <input
+          <Button
             type="submit"
-            value="Login"
-            className="w-full px-4 py-2 font-semibold text-white bg-purple-500 hover:bg-purple-700  rounded-lg cursor-pointer"
-          />
+            className="w-full px-4 py-2 font-semibold text-white bg-purple-500 hover:bg-purple-700  rounded cursor-pointer"
+          >
+            Login
+          </Button>
         </form>
         <div className="text-center">
           <Link href="/signup" className="text-purple-500 hover:underline">

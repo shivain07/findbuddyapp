@@ -18,7 +18,6 @@ export async function POST(request: NextRequest) {
       !tags ||
       !location 
     ) {
-      console.log(reqBody)
       return NextResponse.json(
         { error: "Required fields are missing" },
         { status: 400 }

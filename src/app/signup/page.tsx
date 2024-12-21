@@ -149,7 +149,7 @@ function SignupPage() {
         {currentStep === 1 && (
           <Button
             type="submit"
-            className="bg-purple-500 hover:bg-purple-700  text-white p-2 rounded w-full transition"
+            className="bg-purple-500 hover:bg-purple-700 font-semibold text-white p-2 rounded w-full transition"
             onClick={() => setCurrentStep(2)}
           >
             Next
@@ -158,7 +158,7 @@ function SignupPage() {
         {currentStep === 2 && (
           <Button
             type="submit"
-            className="bg-purple-500 hover:bg-purple-700  text-white p-2 rounded w-full transition"
+            className="bg-purple-500 hover:bg-purple-700 font-semibold  text-white p-2 rounded w-full transition"
             disabled={isButtonDisabled}
           >
             Sign Up
