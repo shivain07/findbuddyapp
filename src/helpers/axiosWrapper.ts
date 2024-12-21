@@ -21,7 +21,7 @@ const ERROR_TYPES = {
 export const useApiCall = () => {
   const { setIsLoading } = useLoaderStore();
   const { user, isLoggedin } = useUserStore();
-  const {setShowLoginPopup } = userLoginPopupStore();
+  const { setShowLoginPopup } = userLoginPopupStore();
   const { setShowUserVerificationModal } = userVerificationPopupStore();
 
   const apiCall = async (config: AxiosRequestConfig): Promise<any> => {
@@ -67,6 +67,12 @@ export const useApiCall = () => {
             variant: "destructive", // Use 'destructive' for error styling
           });
         }
+      } else if (statusCode === 403) {
+        toast({
+          title: `Error ${statusCode}`,
+          description: errorMessage,
+          variant: "destructive", // Use 'destructive' for error styling
+        });
       } else {
         toast({
           title: "Something went wrong.",

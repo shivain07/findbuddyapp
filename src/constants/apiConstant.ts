@@ -26,6 +26,7 @@ export const ROUTES_WITH_VERIFICATION = [
   API_PATH.comment.add,
   API_PATH.post.add
 ]
+
 export const ROUTES_WITH_LOGIN = [
   API_PATH.post.like,
   API_PATH.comment.add,

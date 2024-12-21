@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { API_PATH } from "@/constants/apiConstant";
 import { useApiCall } from "@/helpers/axiosWrapper";
+import { OPEN_PAGES } from "@/constants/uiConstants";
 
 function Header() {
   const router = useRouter();
@@ -38,12 +39,19 @@ function Header() {
   };
 
   const logoClick = () => {
+
+    if(OPEN_PAGES.includes(pathname)&&!isLoggedin){
+      router.push(`/home`);
+      return;
+    }
+
     if (isLoggedin) {
       router.push(`/home`);
     } else {
       router.push(`/`);
     }
   }
+
   return (
     <header className="flex items-center justify-between px-4 py-3 bg-white shadow-md border-b-2">
       {/* LinkedIn Logo */}
@@ -72,7 +80,6 @@ function Header() {
           />
         </div>
       )}
-
 
       {isLoggedin && <div className="flex items-center space-x-2 px-2">
 

@@ -1,8 +1,6 @@
 import { connect } from "@/dbConfig/dbConfig";
 import User from "@/models/userModel";
 import { NextRequest, NextResponse } from "next/server";
-import bcryptjs from "bcryptjs";
-import jwt from "jsonwebtoken";
 import sendEmail from "@/helpers/sendEmail";
 
 connect();
@@ -29,12 +27,17 @@ export async function POST(request: NextRequest) {
     if (
       userInDb.verifyToken &&
       userInDb.verifyTokenExpiry &&
-      currentTime < new Date(userInDb.verifyTokenExpiry)
+      currentTime < new Date(userInDb.verifyTokenExpiry) 
     ) {
+
+      const date = new Date(userInDb.verifyTokenExpiry||"00");
+      // Extract date and time components
+      const formattedDate = date.toLocaleDateString(); // e.g., "12/21/2024"
+      const formattedTime = date.toLocaleTimeString(); // e.g., "4:03:14 PM"
       return NextResponse.json(
         {
           error: "Verification email already sent. Please check your email or wait until it expires.",
-          expiryTime: userInDb.verifyTokenExpiry,
+          expiryTime: `${formattedDate} - ${formattedTime}`,
           errorType: "VFTOKEN"
         },
         { status: 400 }
