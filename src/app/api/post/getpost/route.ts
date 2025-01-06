@@ -1,10 +1,12 @@
+import { handler } from "@/app/middleware/handler";
 import { connect } from "@/dbConfig/dbConfig";
+import { authChecker } from "@/helpers/authChecker";
 import Post from "@/models/postModel";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 connect();
 
-export async function GET(request: NextRequest) {
+async function getpost(request: Request) {
   try {
     // Parse the query parameters from the request URL
     const { searchParams } = new URL(request.url);
@@ -17,13 +19,18 @@ export async function GET(request: NextRequest) {
       );
     }
     // Fetch all posts made by the user
-    const userPosts = await Post.find({ postedBy: userId }).populate("postedBy",'-password').sort({ createdAt: -1 });
+    const userPosts = await Post.find({ postedBy: userId }).populate("postedBy", '-password').sort({ createdAt: -1 });
 
     return NextResponse.json({ userPosts }, { status: 200 });
   } catch (error: any) {
     return NextResponse.json(
-      { error: "Internal server error",message:error },
+      { error: "Internal server error", message: error },
       { status: 500 }
     );
   }
 }
+
+export const GET = handler(
+  authChecker,
+  getpost,
+);

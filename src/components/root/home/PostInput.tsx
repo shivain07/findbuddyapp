@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   PopoverContent,
   Popover,
@@ -11,14 +10,12 @@ import { useUserStore } from "@/GlobalStore/userStore";
 import { useApiCall } from "@/helpers/axiosWrapper";
 import { toast } from "@/hooks/use-toast";
 import { IUserPost } from "@/interfaces/user";
-import { Avatar } from "@radix-ui/react-avatar";
 import {
-  ActivityLogIcon,
   FaceIcon,
   GlobeIcon,
   ImageIcon,
 } from "@radix-ui/react-icons";
-import { ChangeEvent, useEffect, useState } from "react";
+import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 export default function PostInput() {
@@ -77,7 +74,7 @@ export default function PostInput() {
       {/* Header */}
       <div className="space-x-4">
         <div>
-          <h3 className="font-bold text-xl">Write your first post</h3>
+          <h3 className="font-bold text-xl">What's on your mind ?</h3>
         </div>
         <div className="flex-1">
           <div className="mt-2 p-2">

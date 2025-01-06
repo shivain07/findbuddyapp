@@ -1,11 +1,13 @@
+import { handler } from "@/app/middleware/handler";
 import { connect } from "@/dbConfig/dbConfig";
+import { authChecker } from "@/helpers/authChecker";
 import { verifyUser } from "@/helpers/verifyUser";
 import Post from "@/models/postModel";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 connect();
 
-export async function POST(request: NextRequest) {
+async function addpost(request: Request) {
   try {
     const reqBody = await request.json();
     const { title, content, postedBy } = reqBody;
@@ -45,3 +47,8 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
+export const POST = handler(
+  authChecker,
+  addpost,
+);

@@ -1,4 +1,4 @@
-import { IUserState } from "@/interfaces/user";
+"use client"
 import Feed from "./Feed";
 import Sidebar from "./Sidebar";
 import ProfileCard from "./ProfileCard";

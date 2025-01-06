@@ -1,11 +1,13 @@
 import { connect } from "@/dbConfig/dbConfig";
 import User from "@/models/userModel";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import sendEmail from "@/helpers/sendEmail";
+import { authChecker } from "@/helpers/authChecker";
+import { handler } from "@/app/middleware/handler";
 
 connect();
 
-export async function POST(request: NextRequest) {
+async function sendmail(request: Request) {
   try {
     const reqBody = await request.json();
     const { userId } = reqBody;
@@ -27,10 +29,10 @@ export async function POST(request: NextRequest) {
     if (
       userInDb.verifyToken &&
       userInDb.verifyTokenExpiry &&
-      currentTime < new Date(userInDb.verifyTokenExpiry) 
+      currentTime < new Date(userInDb.verifyTokenExpiry)
     ) {
 
-      const date = new Date(userInDb.verifyTokenExpiry||"00");
+      const date = new Date(userInDb.verifyTokenExpiry || "00");
       // Extract date and time components
       const formattedDate = date.toLocaleDateString(); // e.g., "12/21/2024"
       const formattedTime = date.toLocaleTimeString(); // e.g., "4:03:14 PM"
@@ -69,3 +71,9 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
+
+export const POST = handler(
+  authChecker,
+  sendmail,
+);

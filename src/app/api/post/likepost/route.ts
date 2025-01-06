@@ -1,11 +1,13 @@
+import { handler } from "@/app/middleware/handler";
 import { connect } from "@/dbConfig/dbConfig";
+import { authChecker } from "@/helpers/authChecker";
 import { verifyUser } from "@/helpers/verifyUser";
 import Post from "@/models/postModel";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 connect();
 
-export async function POST(request: NextRequest) {
+async function likepost(request: Request) {
   try {
     const reqBody = await request.json();
     const { postId, likedBy } = reqBody;
@@ -64,25 +66,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// export async function GET(request: NextRequest) {
-//   try {
-//     const { searchParams } = new URL(request.url);
-//     const postId = searchParams.get("postId");
-
-//     if (!postId) {
-//       return NextResponse.json(
-//         { message: "postId is required" },
-//         { status: 400 }
-//       );
-//     }
-//     // Fetch all posts made by the user
-//     const post = await Post.findById(postId);
-
-//     return NextResponse.json({ userPosts }, { status: 200 });
-//   } catch (error: any) {
-//     return NextResponse.json({
-//       message: error.message,
-//       status: 500,
-//     });
-//   }
-// }
+export const POST = handler(
+  authChecker,
+  likepost,
+);
