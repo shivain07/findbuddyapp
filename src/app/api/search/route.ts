@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
           $maxDistance: rangeInKm*1000, // Maximum distance in meters
         },
       },
-    }).sort({ createdAt: -1 });
+    }).populate("postedBy",'-password').sort({ createdAt: -1 });
 
     return NextResponse.json({
         posts:posts

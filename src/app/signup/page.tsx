@@ -1,7 +1,9 @@
 "use client";
+import PasswordInput from "@/components/modified/PasswordInput";
 import { Button } from "@/components/ui/button";
 import PhotonAutoSuggestion from "@/components/utility/PhotonAutoSuggestion";
 import { API_PATH } from "@/constants/apiConstant";
+import { useUserStore } from "@/GlobalStore/userStore";
 import { useApiCall } from "@/helpers/axiosWrapper";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -31,6 +33,7 @@ function SignupPage() {
     formState: { errors },
   } = useForm<Inputs>();
   const [currentStep, setCurrentStep] = useState(1);
+  const { setUser, setIsLoggedin } = useUserStore();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
@@ -46,13 +49,21 @@ function SignupPage() {
         },
       };
 
-      await apiCall({
+      let response = await apiCall({
         url: API_PATH.user.signup,
         method: "POST",
         data: userData,
-      }).then(() => {
-        router.push("/login");
       });
+
+      if (response.success) {
+        setIsLoggedin(true);
+        localStorage.setItem("accessToken", response.accessToken);
+        localStorage.setItem("refreshToken", response.refreshToken);
+        setUser(response?.user);
+        router.push("/home");
+      } else {
+        setIsLoggedin(false)
+      }
       // Redirect or show success message
     } catch (error) {
       console.error("Signup failed", error);
@@ -76,41 +87,47 @@ function SignupPage() {
           <input
             type="email"
             placeholder="Email"
-            {...register("email", { required: true })}
-            className={`border ${
-              errors.email ? "border-red-500" : "border-gray-300"
-            } p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500`}
+            {...register("email", {
+              required: { value: true, message: "Email is required." },
+              pattern: {
+                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                message: "Enter a valid email.",
+              },
+            })}
+            className={`border ${errors.email ? "border-red-500" : "border-gray-300"
+              } p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500`}
           />
           {errors.email && (
-            <span className="text-red-500 text-sm">Email is required</span>
+            <span className="text-red-500 text-sm">{errors.email.message}</span>
           )}
         </div>
 
         <div className="mb-4">
           <input
             placeholder="Username"
-            {...register("username", { required: true })}
-            className={`border ${
-              errors.username ? "border-red-500" : "border-gray-300"
-            } p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500`}
+            {...register("username", {
+              required: { value: true, message: "Username is required." },
+              minLength: { value: 2, message: "Username must be at least 2 characters." }
+            })}
+            className={`border ${errors.username ? "border-red-500" : "border-gray-300"
+              } p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500`}
           />
           {errors.username && (
-            <span className="text-red-500 text-sm">Username is required</span>
+            <span className="text-red-500 text-sm">{errors.username.message}</span>
           )}
         </div>
 
         <div className="mb-4">
-          <input
-            type="password"
-            placeholder="Password"
-            {...register("password", { required: true })}
-            className={`border ${
-              errors.password ? "border-red-500" : "border-gray-300"
-            } p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500`}
+          <PasswordInput
+            register={register}
+            name="password"
+            errors={errors?.password}
+            validationRules={{
+              required: { value: true, message: "Password is required." },
+              minLength: { value: 6, message: "Password must be at least 6 characters." },
+            }}
+            placeholder="Enter your password"
           />
-          {errors.password && (
-            <span className="text-red-500 text-sm">Password is required</span>
-          )}
         </div>
         {currentStep === 2 && (
           <>
@@ -119,14 +136,13 @@ function SignupPage() {
               <input
                 type="text"
                 placeholder="Tags ex: sports,music"
-                {...register("tags", { required: true })}
-                className={`border ${
-                  errors.password ? "border-red-500" : "border-gray-300"
-                } p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                {...register("tags", { required: { value: true, message: "Please enter some tags preferences" } })}
+                className={`border ${errors.password ? "border-red-500" : "border-gray-300"
+                  } p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500`}
               />
               {errors.tags && (
                 <span className="text-red-500 text-sm">
-                  Please enter some tags preferences
+                  {errors.tags.message}
                 </span>
               )}
             </div>

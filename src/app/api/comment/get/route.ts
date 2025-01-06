@@ -1,10 +1,12 @@
+import { handler } from "@/app/middleware/handler";
 import { connect } from "@/dbConfig/dbConfig";
+import { authChecker } from "@/helpers/authChecker";
 import Comment from "@/models/commentModel";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 connect();
 
-export async function GET(request: NextRequest) {
+ export async function GET(request: Request) {
   try {
     // Parse the query parameters from the request URL
     const { searchParams } = new URL(request.url);

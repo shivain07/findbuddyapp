@@ -274,9 +274,9 @@ const EditUserInfo = ({
                outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6
                ${errors.profileImgUrl ? "focus:outline-red-600" : ""}`}
                 {...register("profileImgUrl", {
-                  required: {
-                    value: false,
-                    message: "Please fill in profile image url",
+                  pattern: {
+                    value: /^(https?:\/\/)?([^\s\/$.?#].[^\s]*)$/,
+                    message: "Please enter a valid url"
                   },
                 })}
               />

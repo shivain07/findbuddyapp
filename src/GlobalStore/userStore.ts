@@ -1,5 +1,6 @@
 import { IUserState } from '@/interfaces/user';
 import {create} from 'zustand';
+import { persist } from 'zustand/middleware';
 
 interface UserStore {
   user: IUserState | null;
@@ -11,20 +12,29 @@ interface UserStore {
   updateUser: (updates: Partial<IUserState>) => void; //Using Partial ensures that you don't need to pass the entire IUserState object, making it more convenient and flexible to use.
 }
 
-export const useUserStore = create<UserStore>((set) => ({
-  user: null, // Initial state is null
-  setUser: (user) => set({ user }),
-  isLoggedin:false,
-  setIsLoggedin: (val) => set({ isLoggedin: val }),
-  updateUser: (updates) =>
-    set((state) => ({
-      user: state.user ? { ...state.user, ...updates } : null,
-    })), 
-  clearUser: () =>
-    set(() => ({
-      user: null,
-    })),
-}));
+// Create the store with persistence
+export const useUserStore = create<UserStore>()(
+  persist(
+    (set) => ({
+      user: null, // Initial state
+      isLoggedin: false,
+      setUser: (user) => set({ user }),
+      setIsLoggedin: (val) => set({ isLoggedin: val }),
+      updateUser: (updates) =>
+        set((state) => ({
+          user: state.user ? { ...state.user, ...updates } : null,
+        })),
+      clearUser: () => set({ user: null, isLoggedin: false }),
+    }),
+    {
+      name: "user-store", // Name of the key in localStorage
+      partialize: (state) => ({
+        user: state.user, // Persist only the 'user' state
+        isLoggedin: state.isLoggedin, // Persist 'isLoggedin'
+      }),
+    }
+  )
+);
 
 export const userVerificationPopupStore = create<{
   showUserVerificationModal:boolean;

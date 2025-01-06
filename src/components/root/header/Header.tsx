@@ -20,7 +20,7 @@ import { OPEN_PAGES } from "@/constants/uiConstants";
 
 function Header() {
   const router = useRouter();
-  const { user, isLoggedin, setIsLoggedin } = useUserStore();
+  const { user, isLoggedin, setIsLoggedin,clearUser } = useUserStore();
   const pathname = usePathname(); // Get the current URL path
   const { apiCall } = useApiCall(); // Accessing the apiCall function
 
@@ -31,6 +31,10 @@ function Header() {
         method: "GET",
         data: { user: user },
       });
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      clearUser();
+      setIsLoggedin(false);
       router.push("/login");
       setIsLoggedin(false);
     } catch (error: any) {

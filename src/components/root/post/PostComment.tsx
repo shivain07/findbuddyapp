@@ -16,9 +16,7 @@ import { Avatar } from "@radix-ui/react-avatar";
 import {
   ArrowDownIcon,
   ChatBubbleIcon,
-  Cross1Icon,
-  DoubleArrowDownIcon,
-  HeartIcon,
+  Cross1Icon
 } from "@radix-ui/react-icons";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -186,14 +184,6 @@ function PostComment({
                     </div>
                   </div>
                   <div className="text-sm p-2 mt-2">{comment.content}</div>
-                  {/* <div>
-                    <Button
-                      variant="ghost"
-                      className="flex items-center text-sm text-gray-600"
-                    >
-                      <HeartIcon className="w-5 h-5" />
-                    </Button>
-                  </div> */}
                 </div>
               ))
             ) : (

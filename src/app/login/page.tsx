@@ -1,4 +1,5 @@
 "use client";
+import PasswordInput from "@/components/modified/PasswordInput";
 import { Button } from "@/components/ui/button";
 import { API_PATH } from "@/constants/apiConstant";
 import { useUserStore } from "@/GlobalStore/userStore";
@@ -15,7 +16,7 @@ type Inputs = {
 function LoginPage() {
   const router = useRouter();
   const { apiCall } = useApiCall();
-  const { setIsLoggedin } = useUserStore();
+  const {setUser, setIsLoggedin } = useUserStore();
   const {
     register,
     handleSubmit,
@@ -27,14 +28,17 @@ function LoginPage() {
       // Add your API call here, e.g.:
 
       const response = await apiCall({
-        url:API_PATH.user.login,
+        url: API_PATH.user.login,
         method: "POST",
-        data:data
+        data: data
       });
 
-      if(response.success){
+      if (response.success) {
         setIsLoggedin(true);
-      }else{
+        localStorage.setItem("accessToken", response.accessToken);
+        localStorage.setItem("refreshToken", response.refreshToken);
+        setUser(response?.user);
+      } else {
         setIsLoggedin(false)
       }
 
@@ -51,19 +55,36 @@ function LoginPage() {
         <h2 className="text-2xl font-bold text-center text-gray-800">Login</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {/* Email input */}
-          <input
-            type="email"
-            placeholder="Email"
-            {...register("email")}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+          <div>
+
+            <input
+              type="email"
+              placeholder="Email"
+              {...register("email", {
+                required: { value: true, message: "Email is required." },
+                pattern: {
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: "Enter a valid email.",
+                },
+              })}
+              className={`w-full px-4 py-2 border ${errors.email ? "border-red-600" : "border-gray-300"}  rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
+            />
+            {errors.email && <span className="text-red-600 mt-2">{errors.email?.message}</span>}
+          </div>
           {/* Password input */}
-          <input
-            type="password"
-            placeholder="Password"
-            {...register("password", { required: true })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+          <div>
+            <PasswordInput
+              register={register}
+              name="password"
+              errors={errors?.password}
+              validationRules={{
+                required: { value: true, message: "Password is required." },
+                minLength: { value: 6, message: "Password must be at least 6 characters." },
+              }}
+              placeholder="Enter your password"
+            />
+          </div>
+
           {/* Submit button */}
           <Button
             type="submit"

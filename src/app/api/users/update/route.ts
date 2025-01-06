@@ -1,10 +1,12 @@
+import { handler } from "@/app/middleware/handler";
 import { connect } from "@/dbConfig/dbConfig";
+import { authChecker } from "@/helpers/authChecker";
 import User from "@/models/userModel";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 connect();
 
-export async function POST(request: NextRequest) {
+async function updateuser(request: Request) {
   try {
     const reqBody = await request.json();
     const { username, profileImgUrl, userId } = reqBody;
@@ -33,8 +35,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       message: "User updated successfully",
       user: {
-        username:updatedUser.username,
-        profileImgUrl:updatedUser.profileImgUrl||""
+        username: updatedUser.username,
+        profileImgUrl: updatedUser.profileImgUrl || ""
       },
     });
 
@@ -45,3 +47,9 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
+
+export const POST = handler(
+  authChecker,
+  updateuser,
+);

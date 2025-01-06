@@ -1,12 +1,14 @@
+import { handler } from "@/app/middleware/handler";
 import { connect } from "@/dbConfig/dbConfig";
+import { authChecker } from "@/helpers/authChecker";
 import { verifyUser } from "@/helpers/verifyUser";
 import Comment from "@/models/commentModel";
 import Post from "@/models/postModel";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 connect();
 
-export async function POST(request: NextRequest) {
+async function addComment(request: Request) {
   try {
     const reqBody = await request.json();
     const { content, postId, postedBy } = reqBody;
@@ -58,3 +60,8 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
+export const POST = handler(
+  authChecker,
+  addComment,
+);

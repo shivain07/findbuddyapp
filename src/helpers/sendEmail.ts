@@ -1,12 +1,11 @@
 import User from "@/models/userModel";
-import { NextRequest, NextResponse } from "next/server";
 import bcryptjs from "bcryptjs";
 import nodemailer from "nodemailer";
 
 async function sendEmail({ email, emailType, userId }: any) {
   try {
     // create a hashed token
-    const hashedToken = await bcryptjs.hash(userId.toString(), 10);
+    const hashedToken = await bcryptjs.hash(userId?.toString(), 10);
 
     if (emailType === "VERIFY") {
       await User.findByIdAndUpdate(userId, {
