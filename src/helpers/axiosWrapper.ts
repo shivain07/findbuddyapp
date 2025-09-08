@@ -99,7 +99,7 @@ export const useApiCall = () => {
       const errorType = error.response?.data?.errorType || ""
       const errorMessage =
         error.response?.data?.error ||
-        error.response.error ||
+        error.response?.error ||
         error.response?.data?.message ||
         error.message ||
         "An unexpected error occurred";

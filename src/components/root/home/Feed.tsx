@@ -18,12 +18,11 @@ export default Feed;
 
 const FeedWall = async () => {
   const relevantPosts = await getRelevantPosts();
-  console.log(relevantPosts);
   return (
     <div className="space-y-6 p-6">
       {relevantPosts.length > 0 &&
-        relevantPosts.map((post) => {
-          return <Post key={post.id} postData={post} />;
+        relevantPosts.map((post,index) => {
+          return <Post key={post?._id||index} postData={post} />;
         })}
     </div>
   );

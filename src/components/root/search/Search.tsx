@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import PhotonAutoSuggestion from "@/components/utility/PhotonAutoSuggestion";
@@ -31,7 +31,7 @@ function Search() {
       },
     })
       .then((res) => {
-       setRelevantPosts(res.posts)
+        setRelevantPosts(res.posts);
       })
       .catch((err) => {
         console.log(err);
@@ -68,21 +68,8 @@ function Search() {
           </div>
           <div className="space-y-6 p-6">
             {relevantPosts?.length > 0 &&
-              relevantPosts.map((post) => {
-                return (
-                  <Post
-                    key={post._id}
-                    _id={post._id}
-                    title={post.title}
-                    content={post.content}
-                    postedBy={post.postedBy}
-                    tags={post.tags}
-                    likes={post.likes}
-                    comments={post.comments}
-                    createdAt={post.createdAt}
-                    updatedAt={post.updatedAt}
-                  />
-                );
+              relevantPosts.map((post,index) => {
+                return <Post key={post?._id||index} postData={post} />;
               })}
           </div>
         </div>
