@@ -24,5 +24,5 @@ const PostSchema = new mongoose.Schema({
 
 PostSchema.index({ geoLocation: "2dsphere" }); // Enable geospatial queries
 
-const Post = mongoose.models.Post || mongoose.model("Post", PostSchema);
+const Post = mongoose?.models?.Post || mongoose.model("Post", PostSchema);
 export default Post;

@@ -5,7 +5,7 @@ import {
   AlertDialogContent,
   AlertDialogTitle,
   AlertDialogHeader,
-  AlertDialogTrigger
+  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { API_PATH } from "@/constants/apiConstant";
@@ -16,17 +16,17 @@ import { Avatar } from "@radix-ui/react-avatar";
 import {
   ArrowDownIcon,
   ChatBubbleIcon,
-  Cross1Icon
+  Cross1Icon,
 } from "@radix-ui/react-icons";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import userNoDp from "@/assets/images/userimg.png";
 import Image from "next/image";
+import { useUserStore } from "@/GlobalStore/userStore";
 interface IPostComment {
   title: string;
   content: string;
   postId: string;
-  userId: string;
   commentsCount: number;
 }
 
@@ -34,13 +34,9 @@ interface ICommentForm {
   comment: string;
 }
 
-function PostComment({
-  title,
-  content,
-  postId,
-  userId,
-  commentsCount,
-}: IPostComment) {
+function PostComment({ title, content, postId, commentsCount }: IPostComment) {
+  const { user } = useUserStore();
+  const userId = user?._id || "";
   const { apiCall } = useApiCall(); // Accessing the apiCall function
   const [comments, setComments] = useState<IComment[]>([]);
   const [totalComments, setTotalComments] = useState(commentsCount);
@@ -51,6 +47,7 @@ function PostComment({
     formState: { errors },
     reset,
   } = useForm<ICommentForm>();
+  const [loadingComment, setLoadingComment] = useState(false);
 
   const onSubmit: SubmitHandler<ICommentForm> = async (data) => {
     let commentData = {
@@ -67,8 +64,8 @@ function PostComment({
 
     if (res) {
       toast({
-        title: "Comment added successfully"
-      })
+        title: "Comment added successfully",
+      });
       getAllComments();
       reset({
         comment: "",
@@ -76,11 +73,11 @@ function PostComment({
     } else {
       setOpen(false);
     }
-
   };
 
   const getAllComments = async () => {
     try {
+      setLoadingComment(true);
       const data = await apiCall({
         url: API_PATH.comment.get,
         method: "GET",
@@ -90,9 +87,11 @@ function PostComment({
       if (data.postComments) {
         setComments(data.postComments);
         setTotalComments(data.postComments.length || 0);
+        setLoadingComment(false);
       }
     } catch (error) {
       console.log(error);
+      setLoadingComment(false);
     }
   };
 
@@ -120,7 +119,6 @@ function PostComment({
               onClick={() => setOpen(false)}
             />
           </AlertDialogTitle>
-
         </AlertDialogHeader>
 
         <p className="text-xl font-bold text-gray-800">{title}</p>
@@ -157,6 +155,12 @@ function PostComment({
             </span>
           </div>
 
+          {loadingComment && (
+            <div className="space-y-2 animate-pulse">
+              <div className="w-32 h-4 bg-gray-300 rounded" />
+              <div className="w-60 h-4 bg-gray-300 rounded" />
+            </div>
+          )}
           <ScrollArea className="h-[200px] py-1">
             {comments.length > 0 ? (
               comments.map((comment) => (
@@ -194,7 +198,6 @@ function PostComment({
           </ScrollArea>
         </div>
       </AlertDialogContent>
-
     </AlertDialog>
   );
 }
