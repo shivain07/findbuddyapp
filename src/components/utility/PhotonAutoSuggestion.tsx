@@ -1,8 +1,18 @@
 "use client"
 import React, { useState, useEffect, Dispatch, SetStateAction } from "react";
 import axios from "axios";
-import Select from "react-select";
-
+import dynamic from "next/dynamic";
+import { SingleValue } from "react-select";
+// Dynamically import with SSR disabled
+const Select = dynamic(() => import("react-select"), { ssr: false }) as unknown as React.FC<{
+  options: OptionType[];
+  onInputChange?: (newValue: string) => void;
+  onChange: (newValue: SingleValue<OptionType>) => void;
+  placeholder?: string;
+  isClearable?: boolean;
+  className?: string;
+  id?: string;
+}>;
 // Type Definitions for Photon API Response
 interface PhotonFeature {
   properties: {

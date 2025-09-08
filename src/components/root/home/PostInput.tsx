@@ -1,3 +1,4 @@
+"use client"
 import { Button } from "@/components/ui/button";
 import {
   PopoverContent,
@@ -77,7 +78,7 @@ export default function PostInput() {
           <h3 className="font-bold text-xl">What's on your mind ?</h3>
         </div>
         <div className="flex-1">
-          <div className="mt-2 p-2">
+          <div className="mt-2 ">
             <label className="block text-sm/6 font-medium text-gray-900 my-1">
               Title :
             </label>
@@ -99,7 +100,7 @@ export default function PostInput() {
             </small>
           </div>
 
-          <div className="mt-2 p-2">
+          <div className="mt-2">
             <label className="block text-sm/6 font-medium text-gray-900 my-1">
               Content :
             </label>
@@ -122,7 +123,7 @@ export default function PostInput() {
               {errors.content?.message}
             </small>
           </div>
-          <div className="mt-2 p-2">
+          <div className="mt-2">
             <label className="block text-sm/6 font-medium text-gray-900 my-1">
               Tags :
             </label>
@@ -133,7 +134,7 @@ export default function PostInput() {
               defaultValue={""}
             />
           </div>
-          <div className="mt-2 p-2">
+          <div className="mt-2">
             <PhotonAutoSuggestion
               selectedCoordinates={selectedCoordinates}
               setSelectedCoordinates={setSelectedCoordinates}

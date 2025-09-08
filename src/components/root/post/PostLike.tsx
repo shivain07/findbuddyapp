@@ -1,19 +1,20 @@
+"use client"
 import { Button } from "@/components/ui/button";
 import { API_PATH } from "@/constants/apiConstant";
+import { useUserStore } from "@/GlobalStore/userStore";
 import { useApiCall } from "@/helpers/axiosWrapper";
 import { HeartFilledIcon, HeartIcon } from "@radix-ui/react-icons";
-import { Types } from "mongoose";
 import { useEffect, useState } from "react";
 
 function PostLike({
   postId,
-  userId,
   likes,
 }: {
   postId: string;
-  userId: string;
   likes: string[];
 }) {
+  const { user } = useUserStore();
+  const userId = user?._id||"";
   const { apiCall } = useApiCall(); // Accessing the apiCall function
   const [isLiked, setIsLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(likes?.length || 0);
@@ -25,7 +26,6 @@ function PostLike({
     }
   }, [likes]);
 
-  const getAllLikes = () => { };
 
   const likePost = async () => {
     try {
@@ -40,7 +40,9 @@ function PostLike({
 
       if (response) {
         setIsLiked(!isLiked);
-        isLiked ? setLikesCount(prev => prev - 1) : setLikesCount(prev => prev + 1)
+        isLiked
+          ? setLikesCount((prev) => prev - 1)
+          : setLikesCount((prev) => prev + 1);
       }
     } catch (error) {
       console.log(error);
