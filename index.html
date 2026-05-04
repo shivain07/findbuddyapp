@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="FindBuddy - A simple social web app to connect with friends and find your buddy">
+    <meta name="theme-color" content="#6366f1">
+    <title>FindBuddy - Connect with Friends</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+
+        .content {
+            padding: 50px 40px;
+        }
+
+        .content section {
+            margin-bottom: 40px;
+        }
+
+        .content h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+
+        .content p {
+            color: #555;
+            margin-bottom: 10px;
+            font-size: 1.05em;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .feature-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.2);
+        }
+
+        .feature-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #f8f9fa;
+        }
+
+        .tech-stack {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .tech-stack p {
+            margin-bottom: 10px;
+        }
+
+        .tech-badges {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .badge {
+            background: #667eea;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+
+        .footer {
+            background: #f8f9fa;
+            padding: 30px 40px;
+            text-align: center;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .footer p {
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .social-links a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: #764ba2;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .content {
+                padding: 30px 20px;
+            }
+
+            .header {
+                padding: 40px 20px;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        /* Accessibility focus styles */
+        button:focus,
+        a:focus {
+            outline: 3px solid #667eea;
+            outline-offset: 2px;
+        }
+
+        /* Skip to main content link */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #667eea;
+            color: white;
+            padding: 8px;
+            text-decoration: none;
+            z-index: 100;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+    </style>
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to main content</a>
+
+    <div class="container">
+        <header class="header">
+            <h1>🤝 FindBuddy</h1>
+            <p>Connect with Friends, Find Your Perfect Buddy</p>
+        </header>
+
+        <main id="main" class="content">
+            <section>
+                <h2>Welcome to FindBuddy</h2>
+                <p>
+                    FindBuddy is a simple yet powerful social web application designed to help you connect with 
+                    friends and discover meaningful relationships. Whether you're looking to expand your social circle 
+                    or find like-minded individuals, FindBuddy makes it easy and enjoyable.
+                </p>
+            </section>
+
+            <section>
+                <h2>Key Features</h2>
+                <div class="features">
+                    <div class="feature-card">
+                        <h3>👥 Connect</h3>
+                        <p>Build meaningful connections with people who share your interests and values.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>💬 Communicate</h3>
+                        <p>Real-time messaging to stay in touch with your friends and buddies.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>🎯 Discover</h3>
+                        <p>Find friends based on interests, location, and preferences.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>🔐 Secure</h3>
+                        <p>Your privacy and security are our top priorities.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2>About This Project</h2>
+                <p>
+                    FindBuddy is built with modern web technologies to provide a seamless user experience. 
+                    Our tech stack includes TypeScript, JavaScript, and CSS for a robust and responsive application.
+                </p>
+                <div class="tech-stack">
+                    <strong>Technology Stack:</strong>
+                    <div class="tech-badges">
+                        <span class="badge">TypeScript (96.4%)</span>
+                        <span class="badge">JavaScript (1.9%)</span>
+                        <span class="badge">CSS (1.7%)</span>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Get Started</h2>
+                <p>
+                    Ready to find your buddy? Visit our application or explore our source code on GitHub 
+                    to see how FindBuddy is built.
+                </p>
+                <div class="cta-buttons">
+                    <a href="https://github.com/shivain07/findbuddyapp" class="btn btn-primary">View on GitHub</a>
+                    <button class="btn btn-secondary" onclick="alert('Application link coming soon!')">Launch App</button>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2026 FindBuddy. All rights reserved.</p>
+            <p>Built with ❤️ by the FindBuddy Team</p>
+            <div class="social-links">
+                <a href="https://github.com/shivain07/findbuddyapp">GitHub</a>
+                <a href="#contact">Contact</a>
+                <a href="#privacy">Privacy</a>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
